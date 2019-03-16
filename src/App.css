@@ -33,14 +33,94 @@
 }
 
 /* Main search */
+input {
+    border: none;
+}
+input:focus {
+    border: none;
+    outline: none;
+}
 .main-search {
     display: flex;
-    justify-content: center;
+    width: 60%;
+    margin: 50px auto;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px 3px #e8e8e8;
 }
 .main-search__field {
-    max-width: min-content;
+    flex: 1;
+    border: 1px solid #efefef;
+}
+.main-search__field--text,
+.react-datepicker__input-container input {
+    padding: 28px 12px;
 }
 .autocomplete-results {
     height: 150px;
+    width: 225px;
     overflow-y: scroll;
+    position: absolute;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    padding: 6px;
+    box-shadow: 0px 0px 8px 3px #e8e8e8;
+    border-top: none;
+    top: 125px;
+    z-index: 999;
+}
+
+.autocomplete-results__results:hover,
+.autocomplete-results__results:hover .autocomplete-results__results--country {
+    background: #8fb2ff;
+    color: #fff;
+    cursor: pointer;
+}
+.autocomplete-results__results--country {
+    color: #bfbfbf;
+    margin-left: 5px;
+}
+
+.main-search-passengers {
+    position: relative;
+}
+.main-search__field__operation {
+    position: absolute;
+    right: 0;
+    width: 30px;
+    height: 50%;
+    line-height: 30px;
+    background: #2196f3;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 2px;
+}
+.main-search__field__operation--minus {
+    bottom: 0;
+}
+
+.main-search--button {
+    font-size: 26px;
+    position: relative;
+    color: #2196f3;
+    cursor: pointer;
+}
+.main-search--button:hover .fa-arrows-alt-h {
+    transform: rotate(180deg);
+}
+
+.main-search--button .fa-arrows-alt-h {
+    position: absolute;
+    top: 30%;
+    right: -16px;
+    border-radius: 50px;
+    background: #fff;
+    border: 1px solid #e0d8d8;
+    padding: 2px;
+    transition: transform 0.4s cubic-bezier(0.35, -0.43, 0, 1.09),
+        -webkit-transform 0.4s ease-in-out;
+}
+.main-search--destination input {
+    text-indent: 6px;
 }

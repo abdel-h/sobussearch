@@ -1,21 +1,36 @@
 import React, { Component } from 'react';
 import './App.css';
 import AutoCompleteField from './components/AutoCompleteField';
+import Counter from './components/Counter';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsAltH } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faArrowsAltH);
 
 class App extends Component {
     constructor(props) {
         super(props);
+        /**
+         * State object needs some improvments
+         */
         this.state = {
-            fetching: false,
+            firstLoad: true,
             data: [],
             returnData: [],
             departure: '',
             arrival: '',
-            selectedDate: new Date()
+            selectedDate: new Date(),
+            passengers: 1,
+            renderdepartureResults: false,
+            renderarrivalResults: false
         };
     }
+    /* *
+     * Needs improvments to remove the nested if statements.
+     * */
     doAutoComplete = (event, field) => {
         const keyword = event.target.value;
         if ('' === keyword) {
@@ -42,16 +57,58 @@ class App extends Component {
     dateHasChanged = date => {
         this.setState({ selectedDate: date });
     };
+    changePassengers = operation => {
+        let p = this.state.passengers;
+        if ('+' === operation) {
+            this.setState({ passengers: ++p });
+        } else if ('-' === operation && p > 1) {
+            this.setState({ passengers: --p });
+        }
+    };
 
-    displayAutoCompleteField = (name, data) => {
+    clickedItem = (name, value) => {
+        this.setState({ [name]: value });
+    };
+
+    doSwitchFields = () => {
+        let { data, returnData, departure, arrival } = this.state;
+        const newData = [...returnData];
+        const newReturnData = [...data];
+        const newDeparture = arrival;
+        const newArrival = departure;
+        this.setState({
+            returnData: newReturnData,
+            data: newData,
+            departure: newDeparture,
+            arrival: newArrival
+        });
+    };
+
+    doSwithResultsVisiblity = fieldName => {
+        setTimeout(() => {
+            if (!this.state.firstLoad) {
+                const field = `render${fieldName}Results`;
+                this.setState({
+                    [field]: !this.state[field]
+                });
+            }
+            this.setState({ firstLoad: false });
+        }, 100);
+    };
+    renderAutoCompleteField = (name, data) => {
         const showResults = this.state[name] === '' ? false : true;
         return (
             <AutoCompleteField
                 data={data}
                 showResults={showResults}
+                name={name}
+                value={this.state[name]}
+                renderResults={this.state[`render${name}Results`]}
                 handleChange={e => {
                     this.doAutoComplete(e, name);
                 }}
+                clickedItem={this.clickedItem}
+                switchVisibility={this.doSwithResultsVisiblity}
             />
         );
     };
@@ -60,10 +117,16 @@ class App extends Component {
         return (
             <div className="main-search">
                 <div className="main-search__field main-search--departure">
-                    {this.displayAutoCompleteField('departure', data)}
+                    {this.renderAutoCompleteField('departure', data)}
+                </div>
+                <div
+                    className="main-search--button"
+                    onClick={this.doSwitchFields}
+                >
+                    <FontAwesomeIcon icon="arrows-alt-h" />
                 </div>
                 <div className="main-search__field main-search--destination">
-                    {this.displayAutoCompleteField('arrival', returnData)}
+                    {this.renderAutoCompleteField('arrival', returnData)}
                 </div>
                 <div className="main-search__field main-search-departure-date main-search-date-picker">
                     <DatePicker
@@ -72,7 +135,11 @@ class App extends Component {
                     />
                 </div>
                 <div className="main-search__field main-search-passengers">
-                    <input type="text" />
+                    <Counter
+                        text={'passenger'}
+                        value={this.state.passengers}
+                        changePassengers={this.changePassengers}
+                    />
                 </div>
             </div>
         );
