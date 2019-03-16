@@ -48,7 +48,7 @@ input:focus {
 .main-search {
     display: flex;
     width: 60%;
-    margin: 50px auto;
+    margin: 50px auto 10px auto;
     border: 1px solid #e1e1e1;
     border-radius: 5px;
 }
@@ -67,6 +67,7 @@ input:focus {
     overflow-y: scroll;
     position: absolute;
     border: 1px solid #e1e1e1;
+    background: #fff;
     border-radius: 5px;
     padding: 6px;
     border-top: none;
@@ -134,14 +135,18 @@ input:focus {
 .react-datepicker__day--selected {
     background: #2196f3;
 }
-
-/* @media screen and (min-width: 1024px) {
-    .main-search__field--text,
-    .react-datepicker__input-container input {
-        padding: 28px 0;
-        width: 100%;
-    }
-} */
+.main-search__search-btn {
+    width: 200px;
+    margin: 0 auto;
+    display: block;
+    background: #2196f3;
+    border: none;
+    padding: 15px;
+    color: #fff;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+}
 @media screen and (min-width: 1024px) {
     .main-search-passengers input {
         padding: 28px 0.2vw;

@@ -40,24 +40,30 @@ export default class AutoCompleteField extends Component {
     renderAutoCompleteResults = () => {
         const { showResults } = this.props;
         if (showResults && this.state.focused)
-            return (
-                <div className="autocomplete-results">
-                    {this.props.data.map((d, index) => {
-                        const { i, n, c, lat, lng } = d;
-                        return (
-                            <Result
-                                key={index}
-                                city={n}
-                                country={c}
-                                index={i}
-                                lat={lat}
-                                lng={lng}
-                                inputName={this.props.name}
-                                clickedItem={this.props.clickedItem}
-                            />
-                        );
-                    })}
-                </div>
-            );
+            if (this.props.data.length) {
+                return (
+                    <div className="autocomplete-results">
+                        {this.props.data.map((d, index) => {
+                            const { i, n, c, lat, lng } = d;
+                            return (
+                                <Result
+                                    key={index}
+                                    city={n}
+                                    country={c}
+                                    index={i}
+                                    lat={lat}
+                                    lng={lng}
+                                    inputName={this.props.name}
+                                    clickedItem={this.props.clickedItem}
+                                />
+                            );
+                        })}
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="autocomplete-results">Invalid Location</div>
+                );
+            }
     };
 }

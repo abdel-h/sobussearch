@@ -87,7 +87,15 @@ class App extends Component {
             arrival: newArrival
         });
     };
-
+    doSearch = () => {
+        let searchObject = {
+            departure: this.state.departure,
+            arrival: this.state.arrival,
+            date: this.state.selectedDate,
+            passengers: this.state.passengers
+        };
+        console.log(searchObject);
+    };
     inputFocused = fieldName => {
         setTimeout(() => {
             this.setState({ focusedInput: fieldName });
@@ -122,41 +130,49 @@ class App extends Component {
         const { data, returnData } = this.state;
 
         return (
-            <div className="main-search">
-                <div className="main-search__field main-search--departure">
-                    {this.renderAutoCompleteField(
-                        'departure',
-                        data,
-                        'Departure'
-                    )}
+            <>
+                <div className="main-search">
+                    <div className="main-search__field main-search--departure">
+                        {this.renderAutoCompleteField(
+                            'departure',
+                            data,
+                            'Departure'
+                        )}
+                    </div>
+                    <div
+                        className="main-search--button"
+                        onClick={this.doSwitchFields}
+                    >
+                        {this.renderIcons()}
+                    </div>
+                    <div className="main-search__field main-search--destination">
+                        {this.renderAutoCompleteField(
+                            'arrival',
+                            returnData,
+                            'Arrival'
+                        )}
+                    </div>
+                    <div className="main-search__field main-search-departure-date main-search-date-picker">
+                        <DatePicker
+                            selected={this.state.selectedDate}
+                            onChange={this.dateHasChanged}
+                        />
+                    </div>
+                    <div className="main-search__field main-search-passengers">
+                        <Counter
+                            text={'Passenger'}
+                            value={this.state.passengers}
+                            changePassengers={this.changePassengers}
+                        />
+                    </div>
                 </div>
-                <div
-                    className="main-search--button"
-                    onClick={this.doSwitchFields}
+                <button
+                    className="main-search__search-btn"
+                    onClick={this.doSearch}
                 >
-                    {this.renderIcons()}
-                </div>
-                <div className="main-search__field main-search--destination">
-                    {this.renderAutoCompleteField(
-                        'arrival',
-                        returnData,
-                        'Arrival'
-                    )}
-                </div>
-                <div className="main-search__field main-search-departure-date main-search-date-picker">
-                    <DatePicker
-                        selected={this.state.selectedDate}
-                        onChange={this.dateHasChanged}
-                    />
-                </div>
-                <div className="main-search__field main-search-passengers">
-                    <Counter
-                        text={'Passenger'}
-                        value={this.state.passengers}
-                        changePassengers={this.changePassengers}
-                    />
-                </div>
-            </div>
+                    search
+                </button>
+            </>
         );
     }
 }
