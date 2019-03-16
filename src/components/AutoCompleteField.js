@@ -5,13 +5,12 @@ export default class AutoCompleteField extends Component {
     constructor(props) {
         super(props);
         this.showResults = true;
+        this.state = {
+            focused: false
+        };
     }
     handleChange = event => {
         this.props.handleChange(event);
-    };
-    handleVisibility = () => {
-        console.log(this.props.name, this.props.renderResults);
-        this.props.switchVisibility(this.props.name);
     };
     render() {
         return (
@@ -20,17 +19,26 @@ export default class AutoCompleteField extends Component {
                     type="text"
                     value={this.props.value}
                     onChange={this.handleChange}
-                    onBlur={this.handleVisibility}
-                    onFocus={this.handleVisibility}
                     className="main-search__field--text"
+                    onFocus={() => {
+                        this.inputFocusChanged();
+                    }}
+                    onBlur={() => {
+                        this.inputFocusChanged();
+                    }}
                 />
                 {this.renderAutoCompleteResults()}
             </>
         );
     }
+    inputFocusChanged = () => {
+        setTimeout(() => {
+            this.setState({ focused: !this.state.focused });
+        }, 100);
+    };
     renderAutoCompleteResults = () => {
-        const { showResults, renderResults, name } = this.props;
-        if (showResults && !renderResults)
+        const { showResults } = this.props;
+        if (showResults && this.state.focused)
             return (
                 <div className="autocomplete-results">
                     {this.props.data.map((d, index) => {

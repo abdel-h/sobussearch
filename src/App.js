@@ -24,8 +24,7 @@ class App extends Component {
             arrival: '',
             selectedDate: new Date(),
             passengers: 1,
-            renderdepartureResults: false,
-            renderarrivalResults: false
+            focusedInput: ''
         };
     }
     /* *
@@ -84,15 +83,9 @@ class App extends Component {
         });
     };
 
-    doSwithResultsVisiblity = fieldName => {
+    inputFocused = fieldName => {
         setTimeout(() => {
-            if (!this.state.firstLoad) {
-                const field = `render${fieldName}Results`;
-                this.setState({
-                    [field]: !this.state[field]
-                });
-            }
-            this.setState({ firstLoad: false });
+            this.setState({ focusedInput: fieldName });
         }, 100);
     };
     renderAutoCompleteField = (name, data) => {
@@ -103,12 +96,11 @@ class App extends Component {
                 showResults={showResults}
                 name={name}
                 value={this.state[name]}
-                renderResults={this.state[`render${name}Results`]}
                 handleChange={e => {
                     this.doAutoComplete(e, name);
                 }}
                 clickedItem={this.clickedItem}
-                switchVisibility={this.doSwithResultsVisiblity}
+                inputFocused={this.inputFocused}
             />
         );
     };
