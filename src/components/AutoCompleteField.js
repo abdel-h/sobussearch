@@ -16,6 +16,7 @@ export default class AutoCompleteField extends Component {
         return (
             <>
                 <input
+                    placeholder={this.props.placeholder}
                     type="text"
                     value={this.props.value}
                     onChange={this.handleChange}

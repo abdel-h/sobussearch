@@ -7,8 +7,10 @@ import DatePicker from 'react-datepicker';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsAltH } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faArrowsAltH);
+library.add(faSpinner);
 
 class App extends Component {
     constructor(props) {
@@ -17,6 +19,7 @@ class App extends Component {
          * State object needs some improvments
          */
         this.state = {
+            fetching: false,
             firstLoad: true,
             data: [],
             returnData: [],
@@ -40,11 +43,13 @@ class App extends Component {
             }
             return;
         }
+        this.setState({ fetching: true });
         fetch(`http://localhost:3001/autocomplete/?keyword=${keyword}`)
             .then(res => {
                 return res.json();
             })
             .then(res => {
+                this.setState({ fetching: false });
                 if ('departure' === field) {
                     this.setState({ data: res, departure: keyword });
                 } else {
@@ -88,7 +93,15 @@ class App extends Component {
             this.setState({ focusedInput: fieldName });
         }, 100);
     };
-    renderAutoCompleteField = (name, data) => {
+    renderIcons = () => {
+        const { fetching } = this.state;
+        return fetching ? (
+            <FontAwesomeIcon icon="spinner" spin />
+        ) : (
+            <FontAwesomeIcon icon="arrows-alt-h" />
+        );
+    };
+    renderAutoCompleteField = (name, data, placeholder) => {
         const showResults = this.state[name] === '' ? false : true;
         return (
             <AutoCompleteField
@@ -101,24 +114,34 @@ class App extends Component {
                 }}
                 clickedItem={this.clickedItem}
                 inputFocused={this.inputFocused}
+                placeholder={placeholder}
             />
         );
     };
     render() {
         const { data, returnData } = this.state;
+
         return (
             <div className="main-search">
                 <div className="main-search__field main-search--departure">
-                    {this.renderAutoCompleteField('departure', data)}
+                    {this.renderAutoCompleteField(
+                        'departure',
+                        data,
+                        'Departure'
+                    )}
                 </div>
                 <div
                     className="main-search--button"
                     onClick={this.doSwitchFields}
                 >
-                    <FontAwesomeIcon icon="arrows-alt-h" />
+                    {this.renderIcons()}
                 </div>
                 <div className="main-search__field main-search--destination">
-                    {this.renderAutoCompleteField('arrival', returnData)}
+                    {this.renderAutoCompleteField(
+                        'arrival',
+                        returnData,
+                        'Arrival'
+                    )}
                 </div>
                 <div className="main-search__field main-search-departure-date main-search-date-picker">
                     <DatePicker
@@ -128,7 +151,7 @@ class App extends Component {
                 </div>
                 <div className="main-search__field main-search-passengers">
                     <Counter
-                        text={'passenger'}
+                        text={'Passenger'}
                         value={this.state.passengers}
                         changePassengers={this.changePassengers}
                     />
