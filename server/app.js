@@ -28,5 +28,5 @@ app.get('/', function(req, res) {
 });
 
 app.listen(process.env.PORT || 8080, function() {
-    console.log('Example app listening on port 3001!');
+    console.log('Running at PORT: ' + process.env.PORT || 8080);
 });
