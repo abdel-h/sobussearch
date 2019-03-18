@@ -44,9 +44,7 @@ class App extends Component {
             return;
         }
         this.setState({ fetching: true });
-        fetch(
-            `https://sobussearch.herokuapp.com/autocomplete/?keyword=${keyword}`
-        )
+        fetch(`/autocomplete/?keyword=${keyword}`)
             .then(res => {
                 return res.json();
             })
