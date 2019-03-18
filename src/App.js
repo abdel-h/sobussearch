@@ -18,6 +18,7 @@ class App extends Component {
         /**
          * State object needs some improvments
          */
+
         this.state = {
             fetching: false,
             firstLoad: true,
@@ -27,9 +28,21 @@ class App extends Component {
             arrival: '',
             selectedDate: new Date(),
             passengers: 1,
-            focusedInput: ''
+            focusedInput: '',
+            windowWidth: window.innerWidth,
+            datePickerPortal: window.innerWidth < 1024
         };
     }
+    componentDidMount() {
+        window.addEventListener('resize', this.dimensionsChanged);
+    }
+
+    dimensionsChanged = () => {
+        const windowWidth = window.innerWidth;
+        const datePickerPortal = windowWidth < 1024;
+
+        this.setState({ windowWidth, datePickerPortal });
+    };
     /* *
      * Needs improvments to remove the nested if statements.
      * */
@@ -126,6 +139,24 @@ class App extends Component {
             />
         );
     };
+    renderDatePicker = () => {
+        if (this.state.datePickerPortal) {
+            return (
+                <DatePicker
+                    selected={this.state.selectedDate}
+                    onChange={this.dateHasChanged}
+                    withPortal
+                />
+            );
+        } else {
+            return (
+                <DatePicker
+                    selected={this.state.selectedDate}
+                    onChange={this.dateHasChanged}
+                />
+            );
+        }
+    };
     render() {
         const { data, returnData } = this.state;
 
@@ -153,10 +184,7 @@ class App extends Component {
                         )}
                     </div>
                     <div className="main-search__field main-search-departure-date main-search-date-picker">
-                        <DatePicker
-                            selected={this.state.selectedDate}
-                            onChange={this.dateHasChanged}
-                        />
+                        {this.renderDatePicker()}
                     </div>
                     <div className="main-search__field main-search-passengers">
                         <Counter
