@@ -23,7 +23,7 @@ app.use('/autocomplete', (req, res, next) => {
 app.get('/autocomplete', function(req, res) {
     res.json(req.autocomplete);
 });
-app.get('*', function(req, res) {
+app.get('/', function(req, res) {
     res.send('Hello !');
 });
 
