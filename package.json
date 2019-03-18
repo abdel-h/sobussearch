@@ -14,12 +14,13 @@
         "react-scripts": "2.1.8"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "client": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "installbackend": "cd server && npm install",
-        "startAll": "concurrently \" npm start \" \" node server/app.js \" "
+        "start": "concurrently \" npm run client \" \" node server/app.js \" ",
+        "heroku-postbuild": "cd server && npm install"
     },
     "eslintConfig": {
         "extends": "react-app"
