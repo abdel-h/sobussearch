@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const path = require('path');
 
 const app = express();
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors());
 
 app.use('/autocomplete', (req, res, next) => {
@@ -24,7 +26,8 @@ app.get('/autocomplete', function(req, res) {
     res.json(req.autocomplete);
 });
 app.get('/', function(req, res) {
-    res.send('Hello !');
+    res.sendFile(path.join(__dirname + '../public/index.html'));
+    res.end();
 });
 
 app.listen(process.env.PORT || 8080, function() {
