@@ -10,7 +10,7 @@ app.use(cors());
 app.use('/autocomplete', (req, res, next) => {
     const keyword = req.query.keyword;
     axios({
-        url: 'https://interview.sobus.fr:8080/autocomplete',
+        url: '',
         method: 'post',
         data: {
             key: 'ImBuildingASearchBar',
